@@ -1,0 +1,40 @@
+{
+  "name": "pokeapi",
+  "version": "0.0.1",
+  "description": "A pokemon rest API implemented with expressJS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app/server.js",
+    "dev": "nodemon app/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/norzon/pokeapi.git"
+  },
+  "keywords": [
+    "pokemon",
+    "pokedex",
+    "api",
+    "rest",
+    "express",
+    "javascript"
+  ],
+  "author": {
+    "name": "Alexandros Leontakianakos",
+    "email": "alleon20@gmail.com"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/norzon/pokeapi/issues"
+  },
+  "homepage": "https://github.com/norzon/pokeapi#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mariadb": "^0.7.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4"
+  }
+}
