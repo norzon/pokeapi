@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Contributors.md file
+- settings-template file containing the server (app) settings
 
 ### Changed
 - Readme.md, fixed links
+- package.json, changed test script to call mocha library
+- .gitignore, now ignores the settings.js file as it is different per app instance
+- server.js contains basic stuff. get '/' returns basic server info
 
 ## [0.0.1] - 2018-09-05
 ### Added
