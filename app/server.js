@@ -5,22 +5,15 @@
 const express = require('express');
 // Initialize express app
 const app = express();
-// Load mysql
-const mysql = require('mysql');
 
 // Load server settings and package file
 const settings = require('../settings');
 const package = require('../package.json');
 
-// Create database pool
-const pool = mysql.createPool({
-    connectionLimit: settings.mysql.conn,
-    host: settings.mysql.host,
-    user: settings.mysql.user,
-    password: settings.mysql.pswd,
-    database: settings.mysql.dtbs,
-    port: settings.mysql.port
-});
+// Load db wrapper
+const DB = require('./db');
+const db = new DB(settings.mysql);
+
 
 /*
 ---------- Middlewares ----------
@@ -32,13 +25,8 @@ const pool = mysql.createPool({
 */
 // Get the API status, version etc.
 app.get('/', (req, res) => {
-    pool.query('SELECT CURRENT_TIMESTAMP(3) AS date', function (error, results, fields) {
-        if (error) {
-            res.status(500).json({
-                success: false,
-                description: error
-            });
-        }
+    db.query('SELECT CURRENT_TIMESTAMP(3) AS date')
+    .then(results => {
         res.json({
             success: true,
             description: 'Fetched the server status successfully',
@@ -60,7 +48,13 @@ app.get('/', (req, res) => {
                 }
             }
         });
-    });
+    })
+    .catch(error => {
+        res.status(500).json({
+            success: false,
+            description: error
+        });
+    })
 });
 
 
@@ -68,12 +62,9 @@ app.get('/', (req, res) => {
 ---------- Checks ----------
 */
 try {
-    // Check db connection
-    pool.query('SELECT CURRENT_DATE AS `date`', function (error, results, fields) {
-        if (error) {
-            throw error;
-        }
-    });
+    // Test database
+    db.test();
+
     // Run server on port
     app.listen(8080, () => console.log('App running on 8080'));
 } catch (e) {

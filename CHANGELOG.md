@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Contributors.md file
 - settings-template file containing the server (app) settings
+- db.js contains a mysql database wrapper which works with js promises
 
 ### Changed
 - Readme.md, fixed links
