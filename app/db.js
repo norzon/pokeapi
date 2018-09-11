@@ -94,17 +94,18 @@ class STATEMENT {
      */
     execute (input) {
         let query = this._str;
-        const params = [];
+        let params = [];
 
         if (input instanceof Array) {
             params = input;
         } else if (typeof input === "object") {
-            // Replace the key with a "?" and push the
-            // value of the key to the params array
+            Object.keys(input).forEach(key => {
+                params[query.indexOf(key)] = input[key];
+            });
             Object.keys(input).forEach(key => {
                 query = query.replace(key, '?')
-                params.push(input[key])
             });
+            params = params.filter(v => v);
         }
         return this.db.query(query, params);
     }
