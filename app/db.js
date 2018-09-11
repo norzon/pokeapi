@@ -18,25 +18,28 @@ class DB {
         this.settings = settings;
     }
 
+    /**
+     * Creates a new DB class
+     * @param {*} settings The settings to pass to the constructor
+     */
     static initiate (settings) {
         return new this(settings);
     }
 
-    // Check db connection
+    /**
+     * Checks the database connection by executing a generic query
+     */
     test () {
-        const self = this;
-        return new Promise(function(res, rej){
-            self.pool.query('SELECT CURRENT_DATE AS `date`', function (error, results, fields) {
-                if (error) {
-                    rej(error);
-                } else {
-                    res(results);
-                }
-            });
-        });
+        return this.query('SELECT CURRENT_DATE AS `date`');
     }
 
-    // Generic query wrapper
+    /**
+     * Wrapper for running a query to the database using a JS Promise
+     * @param {string} str The query string to execute
+     * @param {Array} params The parameters to bind to the query
+     * 
+     * @returns {Promise<>}
+     */
     query (str, params = []) {
         const self = this;
         return new Promise(function(res, rej){
@@ -60,6 +63,12 @@ class DB {
         });
     }
 
+    /**
+     * Creates a new prepared statement with a given query string
+     * @param {string} str The query string to prepare
+     * 
+     * @returns {STATEMENT} Object Returns a prepared statement
+     */
     prepare (str) {
         return new STATEMENT(str, this);
     }
@@ -79,6 +88,10 @@ class STATEMENT {
         this.db = db;
     }
 
+    /**
+     * Executes the prepared query with the given inputs
+     * @param {Object | Array} input The parameters to bind to the query
+     */
     execute (input) {
         let query = this._str;
         const params = [];
@@ -86,8 +99,9 @@ class STATEMENT {
         if (input instanceof Array) {
             params = input;
         } else if (typeof input === "object") {
+            // Replace the key with a "?" and push the
+            // value of the key to the params array
             Object.keys(input).forEach(key => {
-                // query = query.replace(key, mysql.escape(input[key]));
                 query = query.replace(key, '?')
                 params.push(input[key])
             });
