@@ -6,5 +6,6 @@ module.exports = {
         pswd: '',
         dtbs: 'pokemon',
         port: 3306
-    }
+    },
+    mode: "production"
 }

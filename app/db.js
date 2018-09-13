@@ -14,6 +14,9 @@ class DB {
             port: settings.port
         });
 
+        // Save debug settings
+        this.isDebug = settings.debug || false;
+
         // Save settings
         this.settings = settings;
     }
@@ -43,6 +46,21 @@ class DB {
     query (str, params = []) {
         const self = this;
         return new Promise(function(res, rej){
+            // If not debug, remove unneccessary whitespaces
+            if (!self.isDebug) {
+                // Replace all white spaces with a single white space
+                // Caution, this may break the desired query if more than one white spaces are inside a mysql string
+                str = str.replace(/\s+/g, ' ');
+
+                // The symbols that do not need white spaces before or after
+                let symbols = '(\\=|\\<|\\>|\\,|\\-|\\!|\\+|\\(|\\)|\\*|\\/|\\`)';
+
+                // Search for symbols that have white space before
+                str = str.replace(new RegExp(`([^\\s\\"'])\\s${symbols}`, 'g'), '$1$2');
+                // Search for symbols that have white space after
+                str = str.replace(new RegExp(`${symbols}\\s([^\\s\\"'])`, 'g'), '$1$2');
+            }
+            console.log(str);
             if (params) {
                 self.pool.query(str, params, function(error, results, fields){
                     if (error) {
