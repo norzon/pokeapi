@@ -60,7 +60,6 @@ class DB {
                 // Search for symbols that have white space after
                 str = str.replace(new RegExp(`${symbols}\\s([^\\s\\"'])`, 'g'), '$1$2');
             }
-            console.log(str);
             if (params) {
                 self.pool.query(str, params, function(error, results, fields){
                     if (error) {
