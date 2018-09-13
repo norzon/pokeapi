@@ -12,7 +12,7 @@ const package = require('../package.json');
 
 // Load db wrapper
 const DB = require('./db');
-const db = new DB(settings.mysql);
+const db = new DB(Object.assign(settings.mysql, { debug: settings.mode === "development" }));
 
 
 /*
@@ -56,6 +56,9 @@ app.get('/', (req, res) => {
         });
     })
 });
+
+// Pokemon routes
+app.get('/pokemon', require('./routes/pokemon/get.all')(db));
 
 
 /*
